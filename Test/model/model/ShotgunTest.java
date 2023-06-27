@@ -1,6 +1,10 @@
 package model;
 
+import model.Shotgun;
 import org.junit.jupiter.api.Test;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -12,6 +16,15 @@ class ShotgunTest {
     public void prueba_sgotGun_Random(){
 
         System.out.println(gun.randomText(100));
+
+    }
+    @Test
+    public void pruebaLectura() throws IOException {
+        System.out.println(gun.fragmentador());
+    }
+
+    @Test
+    public void comprobar(){
 
     }
 

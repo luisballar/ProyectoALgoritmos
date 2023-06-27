@@ -2,6 +2,9 @@ package model;
 
 import service.ArchivoDAO;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Random;
 
 public class Shotgun {
@@ -24,7 +27,19 @@ public class Shotgun {
 
         }
         archivo.nuevoTexto(path, textoFinal.toString());
-
         return textoFinal.toString();
     }
+    public String fragmentador() throws IOException {
+        BufferedReader texto = null;
+        String lineaTexto = null;
+        try {
+            texto = archivo.getReadFile(path);
+            lineaTexto = texto.readLine();
+        } catch (IOException ioe) {
+            System.out.println("Problemas con el archivo");
+        }
+
+        return lineaTexto;
+    }
+
 }
