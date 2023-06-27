@@ -20,12 +20,12 @@ class ShotgunTest {
     }
     @Test
     public void pruebaLectura() throws IOException {
-        System.out.println(gun.fragmentador());
+       // System.out.println();
     }
 
     @Test
-    public void comprobar(){
-
+    public void pruebaFragmentador() throws IOException {
+        gun.fragmentador(12,10);
     }
 
 }
