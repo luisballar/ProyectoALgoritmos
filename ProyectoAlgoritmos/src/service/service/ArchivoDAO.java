@@ -21,7 +21,7 @@ public class ArchivoDAO {
     }
 
     // escribe en el archivo
-    public void nuevoTexto(String path, String textoGenerado){
+    public void insertarTexto(String path, String textoGenerado){
         File archivo = new File(path);
 
         try {
@@ -34,7 +34,8 @@ public class ArchivoDAO {
         }
     }
 
-    //Método general para leer un archivo 
+    /*
+    //Método general para leer un archivo
     public BufferedReader getReadFile(String nameFile) throws FileNotFoundException {
         File file = new File(nameFile);
         FileInputStream fis = new FileInputStream(file);
@@ -43,27 +44,21 @@ public class ArchivoDAO {
           return br;
     }
 
-    /*
-    public String readText(String path){
-        StringBuilder sb = new StringBuilder();
+     */
+
+    public String leerArchivo(String path){
+        StringBuilder sb =  new StringBuilder();
         File archivo = new File(path);
 
-        try {
-            BufferedReader br = new BufferedReader
-                    (new FileReader(archivo));
+        try (BufferedReader rd = new BufferedReader(new FileReader(archivo))){
             String ln;
-
-            while (ln = br.readLine() != null){
-                sb.append(ln);
+            while((ln = rd.readLine()) != null){
+                sb.append(ln).append("\n");
             }
-
-        } catch (FileNotFoundException e) {
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
-
+        return sb.toString();
     }
 
-
-     */
 }

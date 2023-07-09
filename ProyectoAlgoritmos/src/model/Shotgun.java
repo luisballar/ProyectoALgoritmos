@@ -2,65 +2,69 @@ package model;
 
 import service.ArchivoDAO;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.LinkedList;
 import java.util.Random;
 
 public class Shotgun {
     private int totalChars;
     private int fragmentos;
     private int longitud;
-
-
+    private String caracteres;
+    private LinkedList<String> listaFragmentos = new LinkedList<String>();
+    ArchivoDAO archivoDAO = new ArchivoDAO();
     String path = "text.txt";
-    ArchivoDAO archivo = new ArchivoDAO();
+    String nuevoPath = "fragmentos.txt";
 
-    // genera un texto con caracteres aletorios
-    public String randomText(int totalChars) {
+
+    // cuenta los caracteres del archivo
+    public int totalCaracteres() throws IOException {
+        caracteres = archivoDAO.leerArchivo(path);
+
+        return caracteres.length();
+    }
+
+    // retorna random entre 0 y la cantidad de caracteres del archivo
+    private int caracteresRandom() throws IOException {
         Random random = new Random();
-        StringBuilder textoFinal = new StringBuilder();
 
-        for (int i = 0; i <= totalChars; i++) {
+        int limite = totalCaracteres() - (longitud + 1);
 
-            char randomChar = (char) (random.nextInt((122 - 97) + 1) + 97); // random de 97 a 122
-            textoFinal.append(randomChar);
-
-        }
-        archivo.nuevoTexto(path, textoFinal.toString());
-        return textoFinal.toString();
+        return random.nextInt(limite); // 0 a contadorCaracteres - 1;
     }
 
-    public String leector() throws IOException {
-        BufferedReader texto = null;
-        String lineaTexto = null;
-        try {
-            texto = archivo.getReadFile(path);
-            lineaTexto = texto.readLine();
-        } catch (IOException ioe) {
-            System.out.println("Problemas con el archivo");
-        }
-        return lineaTexto;
+    // random que oscila entre longitud-1 y longitud+1
+    public int randomLongitud(int longitud){
+        Random random = new Random();
+
+        int logitudPromedio = random.nextInt(3) + (longitud-1);
+
+        return logitudPromedio;
     }
 
-    public void fragmentador(int longitud, int cantFragmentos) throws IOException {
-        boolean primero = false;
-        int traslape = longitud / 2; // 6
-        int indiceActual = 0;
+    // fragmentador
+    public void fragmentador(int cantFragmentos, int longitud) throws IOException {
+        StringBuilder sb = new StringBuilder();
+
+        this.longitud = longitud;
 
         for (int i = 0; i < cantFragmentos; i++) {
-            if (!primero) {
-                System.out.println(leector().substring(0, longitud));
-                indiceActual = longitud;
-                primero = true;
-            } else {
-                    System.out.println(leector().substring(indiceActual - traslape, indiceActual + traslape));
-                    indiceActual += traslape;
-                }
+            int inicioFragmento = caracteresRandom();
+            String nuevoFragmento = caracteres.substring(inicioFragmento, inicioFragmento + randomLongitud(longitud));
 
-
+           // agrega el fragmento a un StringBuilder
+            sb.append(nuevoFragmento).append("\n");
+            // agrega el fragmento a una lista
+            listaFragmentos.add(nuevoFragmento);
         }
 
-
+        // agregar al archivo
+        archivoDAO.insertarTexto(nuevoPath, sb.toString());
     }
+
+
+
+
+
+
 }
